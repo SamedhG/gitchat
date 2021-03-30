@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import Nav from './Nav';
 import Home from './Home';
+import Login from './Login';
 
 
 function App() {
@@ -12,6 +13,9 @@ function App() {
             <Switch>
                 <Route path="/" exact>
                     <Home />
+                </Route>
+                <Route path="/login" exact>
+                    <Login />
                 </Route>
             </Switch>
         </>

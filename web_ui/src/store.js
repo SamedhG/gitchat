@@ -48,11 +48,42 @@ function session(state = load_session(), action) {
     }
 }
 
+function user(state = load_user(), action) {
+    switch (action.type) {
+        case 'user/set':
+            save_user(action.data);
+            return action.data;
+        case 'user/clear':
+            localStorage.removeItem("user");
+            return null;
+        default:
+            return state;
+    }
+}
 
+function save_user(user){
+    localStorage.setItem("user", JSON.stringify(user));
+}
+
+export function load_user() {
+    let user = localStorage.getItem("user");
+    if (!user) {
+        return null;
+    }
+    user = JSON.parse(user);
+    let age = Date.now() - user.time;
+    let hours = 60*60*1000;
+    if (age < 24 * hours) {
+        return user;
+    }
+    else {
+        return null;
+    }
+}
 
 function root_reducer(state, action) {
     let reducer = combineReducers({
-        error, session
+        error, session, user
     });
     return reducer(state, action);
 }
