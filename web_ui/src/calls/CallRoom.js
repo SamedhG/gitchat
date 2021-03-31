@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { join } from './call'
 import store from '../store';
-import Visualizer from './Visualizer';
+import UserCard from './UserCard';
 
 function CallRoom({call}) {
     const { room_id } = useParams();
@@ -18,8 +18,7 @@ function CallRoom({call}) {
             })
     }, [room_id])
     return (<div>
-        { localStream && <Visualizer mediaStream = {localStream} /> }
-
+        { localStream && <UserCard mediaStream = {localStream} /> }
         </div>)
 }
 
