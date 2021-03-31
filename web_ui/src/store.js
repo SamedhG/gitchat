@@ -48,11 +48,21 @@ function session(state = load_session(), action) {
     }
 }
 
+function call(state = null, action) {
+    switch (action.type) {
+        case 'call/connect':
+            return null;
+        default:
+            return state;
+    }
+}
+
+
 
 
 function root_reducer(state, action) {
     let reducer = combineReducers({
-        error, session
+        error, session, call
     });
     return reducer(state, action);
 }

@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import Nav from './Nav';
 import Home from './Home';
-
+import CallRoom from './CallRoom';
 
 function App() {
     return (
@@ -13,6 +13,7 @@ function App() {
                 <Route path="/" exact>
                     <Home />
                 </Route>
+                <Route path="/room/:id" component={CallRoom} exact />
             </Switch>
         </>
     );

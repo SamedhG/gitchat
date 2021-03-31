@@ -2,8 +2,8 @@ use Mix.Config
 
 # Configure your database
 config :gitchat, Gitchat.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "gitchat",
+  password: "Phohhai0peCi",
   database: "gitchat_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,

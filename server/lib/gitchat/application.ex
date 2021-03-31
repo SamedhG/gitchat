@@ -14,9 +14,11 @@ defmodule Gitchat.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Gitchat.PubSub},
       # Start the Endpoint (http/https)
-      GitchatWeb.Endpoint
+      GitchatWeb.Endpoint,
       # Start a worker by calling: Gitchat.Worker.start_link(arg)
       # {Gitchat.Worker, arg}
+      Gitchat.BackupAgent,
+      Gitchat.RoomSup
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
