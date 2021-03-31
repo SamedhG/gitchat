@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import Nav from './Nav';
 import Home from './Home';
-import CallRoom from './CallRoom';
+import CallRoom from './calls/CallRoom';
 
 function App() {
     return (

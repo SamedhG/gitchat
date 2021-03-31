@@ -1,11 +1,11 @@
 import {Socket} from "phoenix"
 
-let socket = new Socket("ws://localhost:4000/socket", {params: {}})
-socket.connect()
 
 
 export function join(room_id, peer_id) {
 
+    let socket = new Socket("ws://localhost:4000/socket", {params: {}})
+    socket.connect()
     // TODO: retrieve token from the session here
     // Currently cheating by treating token as the username
     let channel = socket.channel("room:" + room_id, 
