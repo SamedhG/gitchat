@@ -49,6 +49,15 @@ defmodule GithubAccess do
     |> Enum.find_value(&if &1["primary"], do: &1["email"])
   end
 
+  def get_user_repos(username) do
+    HTTPoison.get!("https://api.github.com/users/#{username}/repos", [
+      #  https://developer.github.com/v3/#user-agent-required
+      {"User-Agent", "ElixirAuthGithub"}
+    ])
+    |> Map.get(:body)
+    |> Poison.decode!()
+  end
+
   def search_users(term) do
     HTTPoison.get!("https://api.github.com/search/users?q=#{term}", [
       #  https://developer.github.com/v3/#user-agent-required

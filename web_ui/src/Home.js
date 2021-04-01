@@ -1,53 +1,57 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { load_user } from "./store";
+import { api_post, api_get } from "./api";
 
-function Home() {
-  const [userInfo, setUserInfo] = useState();
+function Home({user, dispatch}) {
 
-  let user = load_user();
-  console.log(typeof(user))
+  let userCredentials = load_user();
 
-  user = JSON.parse(user);
+  useEffect(async () => {
+    if (userCredentials) {
+      const requestData = {
+        access_token: userCredentials.access_token,
+      };
+
+      // Use code parameter and other parameters to make POST request to proxy_server
+      const userData = await api_post("/user/info", requestData);
+
+      const userRepos = await api_get(`/user/${userData.login}/repos`);
+      userData.repos = userRepos;
+      dispatch({type: 'user/set', data: userData});
+    }
+  }, []);
 
   console.log(user);
 
-  useEffect(() => {
-    let mounted = true;
-    if (user) {
-      const requestData = {
-        access_token: user.access_token,
-      };
-
-      const proxy_url = "http://localhost:4000/api/v1/user/info";
-
-      console.log(requestData);
-
-      // Use code parameter and other parameters to make POST request to proxy_server
-      fetch(proxy_url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setUserInfo(data);
-        });
-    }
-    return () => (mounted = false);
-  }, []);
+  if (!user) {
+    return <div>Please Login!</div>
+  }
 
   return (
     <div>
       <h2>
-        {console.log("User: ")}
-        {console.log(userInfo)}
-        {userInfo ? <div>Welcome {userInfo.login}</div> : <div></div>}
+        <div>Welcome {user.login} <img style={{width: "50px"}} src={user.avatar_url} alt={"Avatar"}/></div>
       </h2>
+      <h3>
+        Repositories
+      </h3>
+      <table className={"table table-striped"} style={{width: "50%"}}>
+        <thead>
+          <tr>
+            <th>Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          {user.repos.map((repo, index) => (
+              <tr key={index}>
+                <td><a target={"_blank"} href={repo.html_url}>{repo.name}</a></td>
+              </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
 
-export default connect(() => ({  }))(Home);
+export default connect(({user}) => ({ user }))(Home);
