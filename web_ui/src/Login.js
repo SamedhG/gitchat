@@ -16,12 +16,17 @@ function Login({ user, dispatch }) {
     // After requesting Github access, Github redirects back to your app with a code parameter
     const url = window.location.href;
     const hasCode = url.includes("?code=");
+    console.log(redirect_uri)
+    console.log("HERE")
+
 
     // If Github API returns the code parameter
     if (hasCode) {
+
       const newUrl = url.split("?code=");
       window.history.pushState({}, null, newUrl[0]);
       const userCode = newUrl[1];
+
 
       const requestData = {
         code: userCode,
@@ -29,13 +34,13 @@ function Login({ user, dispatch }) {
 
       const proxy_url = "http://localhost:4000/api/v1/user/login";
 
-      console.log(requestData)
+      console.log(requestData);
 
       // Use code parameter and other parameters to make POST request to proxy_server
       fetch(proxy_url, {
         method: "POST",
         headers: {
-            'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(requestData),
       })

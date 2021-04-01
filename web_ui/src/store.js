@@ -66,19 +66,7 @@ function save_user(user){
 }
 
 export function load_user() {
-    let user = localStorage.getItem("user");
-    if (!user) {
-        return null;
-    }
-    user = JSON.parse(user);
-    let age = Date.now() - user.time;
-    let hours = 60*60*1000;
-    if (age < 24 * hours) {
-        return user;
-    }
-    else {
-        return null;
-    }
+   return localStorage.getItem("user");
 }
 
 function root_reducer(state, action) {
