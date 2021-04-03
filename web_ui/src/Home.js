@@ -5,9 +5,8 @@ import { api_post, api_get } from "./api";
 
 function Home({user, dispatch}) {
 
-  let userCredentials = load_user();
-
   useEffect(async () => {
+    let userCredentials = load_user();
     if (userCredentials) {
       const requestData = {
         access_token: userCredentials.access_token,
@@ -43,8 +42,8 @@ function Home({user, dispatch}) {
           </tr>
         </thead>
         <tbody>
-          {user.repos.map((repo, index) => (
-              <tr key={index}>
+          {user.repos.map((repo) => (
+              <tr key={repo.id}>
                 <td><a target={"_blank"} href={repo.html_url}>{repo.name}</a></td>
               </tr>
           ))}

@@ -9,8 +9,8 @@ defmodule GithubAccess do
   def github_auth(code) do
     query =
       URI.encode_query(%{
-        "client_id" => System.get_env("GITHUB_CLIENT_ID"),
-        "client_secret" => System.get_env("GITHUB_CLIENT_SECRET"),
+        "client_id" => System.get_env("REACT_APP_CLIENT_ID"),
+        "client_secret" => System.get_env("REACT_APP_CLIENT_SECRET"),
         "code" => code
       })
 
@@ -58,10 +58,8 @@ defmodule GithubAccess do
     |> Poison.decode!()
   end
 
-  def search_users(term) do
-    HTTPoison.get!("https://api.github.com/search/users?q=#{term}", [
-      #  https://developer.github.com/v3/#user-agent-required
-    ])
+  def search_users(term, limit) do
+    HTTPoison.get!("https://api.github.com/search/users?q=#{term}&per_page=#{limit}}", [])
     |> Map.get(:body)
     |> Poison.decode!()
   end
@@ -79,8 +77,6 @@ defmodule GithubAccess do
       |> Map.put("access_token", access_token)
       |> set_user_email(email, access_token)
 
-    # transform map with keys as strings into keys as atoms!
-    # https://stackoverflow.com/questions/31990134
     atom_key_map = for {key, val} <- user, into: %{}, do: {String.to_atom(key), val}
     {:ok, atom_key_map}
   end

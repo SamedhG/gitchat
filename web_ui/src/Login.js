@@ -9,12 +9,6 @@ function Login({ user, dispatch }) {
   const redirect_uri = process.env.REACT_APP_REDIRECT_URI;
   const [userCredentials, setUserCredentials] = useState();
 
-
-
-  function setUser(user) {
-    save_user(user);
-  }
-
   useEffect(() => {
     // After requesting Github access, Github redirects back to your app with a code parameter
     const url = window.location.href;
@@ -45,7 +39,7 @@ function Login({ user, dispatch }) {
       })
         .then((response) => response.json())
         .then((data) => {
-          setUser({access_token: data.access_token});
+          save_user({access_token: data.access_token});
           setUserCredentials(data);
         });
     }

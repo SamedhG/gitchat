@@ -48,7 +48,7 @@ function session(state = load_session(), action) {
     }
 }
 
-function user(state = load_user(), action) {
+function user(state = null, action) {
     switch (action.type) {
         case 'user/set':
             return action.data;
