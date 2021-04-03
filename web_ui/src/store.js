@@ -6,7 +6,7 @@ function error(state = null, action) {
         case 'error/clear':
             return null;
         case 'error/set':
-            setTimeout(() => store.dispatch({type: "error/clear"}), 5000) 
+            setTimeout(() => store.dispatch({type: "error/clear"}), 5000)
             return action.data;
         default:
             return state;
@@ -50,19 +50,40 @@ function session(state = load_session(), action) {
 
 function call(state = null, action) {
     switch (action.type) {
-        case 'call/connect':
+        case 'call/connect': 
+            return action.data
+        default: 
+            return state
+    }
+}
+
+
+function user(state = null, action) {
+    switch (action.type) {
+        case 'user/set':
+            return action.data;
+        case 'user/clear':
             return null;
         default:
             return state;
     }
 }
 
+export function save_user(user){
+    localStorage.setItem("user", JSON.stringify(user));
+}
 
+export function load_user() {
+   return JSON.parse(localStorage.getItem("user"));
+}
 
+export function clear_user() {
+    localStorage.removeItem("user");
+}
 
 function root_reducer(state, action) {
     let reducer = combineReducers({
-        error, session, call
+        error, session, call, user
     });
     return reducer(state, action);
 }

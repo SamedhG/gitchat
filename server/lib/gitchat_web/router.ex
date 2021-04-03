@@ -19,6 +19,16 @@ defmodule GitchatWeb.Router do
     get "/", PageController, :index
   end
 
+  scope "/api/v1", GitchatWeb do
+    pipe_through :api
+
+    post "/user/login", PageController, :login
+    post "/user/info", PageController, :get_user_profile
+    get "/user/:username/repos/", PageController, :get_user_repos
+    get "/search/users", PageController, :search_users
+
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", GitchatWeb do
   #   pipe_through :api

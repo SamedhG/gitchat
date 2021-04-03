@@ -1,28 +1,28 @@
 import store from './store';
-export const BASE_URL = 
-    process.env.NODE_ENV === "production" ? 
-    "http://gitchat.example.com/api/v1" : 
-    "http://localhost:4000/api/v1"
+export const BASE_URL =
+    process.env.NODE_ENV === "production" ?
+    "http://gitchat.example.com/api/v1" :
+    "http://localhost:4000/api/v1";
 
-async function api_get(path) {
+export async function api_get(path) {
     let text = await fetch( BASE_URL + path, {});
     let resp = await text.json();
     return resp.data;
 }
 
 
-async function api_post(path, data) {
+export async function api_post(path, data) {
     let token =  store.getState().session && store.getState().session.token
     let opts = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'x-auth': token
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify(data),
     };
     let text = await fetch(BASE_URL + path, opts);
-    return await text.json();
+    const returnData = await text.json();
+    return returnData;
 }
 
 async function api_patch(path, data) {

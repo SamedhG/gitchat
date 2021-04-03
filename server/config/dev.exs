@@ -3,7 +3,7 @@ use Mix.Config
 # Configure your database
 config :gitchat, Gitchat.Repo,
   username: "gitchat",
-  password: "Phohhai0peCi",
+  password: "gitchat",
   database: "gitchat_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
@@ -21,6 +21,11 @@ config :gitchat, GitchatWeb.Endpoint,
   code_reloader: true,
   check_origin: false,
   watchers: []
+
+config :cors_plug,
+  origin: ["http://localhost:3000"],
+  max_age: 86400,
+  methods: ["GET", "POST", "PATCH", "DELETE"]
 
 # ## SSL Support
 #

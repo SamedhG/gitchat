@@ -4,6 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 import Nav from './Nav';
 import Home from './Home';
 import CallRoom from './calls/CallRoom';
+import Login from './Login';
 
 function App() {
     return (
@@ -14,6 +15,9 @@ function App() {
                     <Home />
                 </Route>
                 <Route path="/room/:id" component={CallRoom} exact />
+                <Route path="/login" exact>
+                    <Login />
+                </Route>
             </Switch>
         </>
     );
