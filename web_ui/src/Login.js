@@ -57,6 +57,7 @@ function Login({ user, dispatch }) {
         {" "}
         Login with Github{" "}
       </a>
+        {JSON.stringify(userCredentials) }
     </div>
   );
 }

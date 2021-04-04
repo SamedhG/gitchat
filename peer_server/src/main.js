@@ -4,7 +4,7 @@ const path = require('path');
 const app = express();
 const server = http.createServer(app);
 const { ExpressPeerServer } = require('peer');
-const port = 4000;
+const port = 5000;
 
 // Might want to set up ssl stuff here?
 const peerServer = ExpressPeerServer(server, {

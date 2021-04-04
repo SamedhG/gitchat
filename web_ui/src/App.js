@@ -14,7 +14,7 @@ function App() {
                 <Route path="/" exact>
                     <Home />
                 </Route>
-                <Route path="/room/:id" component={CallRoom} exact />
+                <Route path="/room/:repo_user/:repo_name" component={CallRoom} exact />
                 <Route path="/login" exact>
                     <Login />
                 </Route>

@@ -5,24 +5,27 @@ defmodule GitchatWeb.RoomChannel do
 
   @impl true
   def join("room:" <> id, %{"token" => token, "peer_id" => peer_id}, socket) do
-    if authorized?(token, id) do
-      # TODO: Token is not the username
-      RoomServer.start(id)
-      RoomServer.join_collaborator(id, "user_" <> token, peer_id)
-      socket = socket
-               |> assign(:room_id, id)
-               |> assign(:username, "user_" <> token)
-      
-      {:ok, socket}
-    else
-      {:error, %{reason: "unauthorized"}}
+
+    case GithubAccess.check_authenticated(%{"access_token" => token}) do
+      {:ok, user } -> 
+        username = user.login
+        repos = GithubAccess.get_user_repos(username)
+        RoomServer.start(id)
+
+        room = if Enum.any?(repos, &(&1["full_name"] == id)) do 
+          RoomServer.join_collaborator(id, username, peer_id)
+        else
+          RoomServer.join_user(id, username, peer_id)
+        end
+
+        socket = socket
+                 |> assign(:room_id, id)
+                 |> assign(:username, username)
+
+        {:ok, room, socket}
+
+      {:error, error} ->
+        {:error, %{reason: "unauthorized"}}
     end
-  end
-
-
-  # Add authorization logic here as required.
-  defp authorized?(_payload, _room_id) do
-    # assign the current user and room id to the socket here
-    true
   end
 end

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { load_user } from "./store";
 import { api_post, api_get } from "./api";
+import {Link} from 'react-router-dom';
 
 function Home({user, dispatch}) {
 
@@ -20,8 +21,6 @@ function Home({user, dispatch}) {
       dispatch({type: 'user/set', data: userData});
     }
   }, []);
-
-  console.log(user);
 
   if (!user) {
     return <div>Please Login!</div>
@@ -44,7 +43,7 @@ function Home({user, dispatch}) {
         <tbody>
           {user.repos.map((repo) => (
               <tr key={repo.id}>
-                <td><a target={"_blank"} href={repo.html_url}>{repo.name}</a></td>
+                <td><Link to={`/room/${repo.full_name}`}>{repo.name}</Link></td>
               </tr>
           ))}
         </tbody>

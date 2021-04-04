@@ -12,6 +12,7 @@ export default function Visualizer({mediaStream}) {
 
 
     const draw = (ctx) => {
+        if (!analyserCanvas.current) return;
         ctx.clearRect(0, 0, analyserCanvas.current.width, analyserCanvas.current.height)
         let dataParm = [...data];             
         ctx.fillStyle = 'white';  //white background          
@@ -34,10 +35,12 @@ export default function Visualizer({mediaStream}) {
 
     useEffect(() => {
         audioSrc.connect(analyser);
-        const ctx = analyserCanvas.current.getContext('2d');
-        analyserCanvas.current.width = 40
-        analyserCanvas.current.height = 40
-        loopingFunction(ctx); 
+        if (analyserCanvas.current) {
+            const ctx = analyserCanvas.current.getContext('2d');
+            analyserCanvas.current.width = 40
+            analyserCanvas.current.height = 40
+            loopingFunction(ctx); 
+        }
     })
 
 

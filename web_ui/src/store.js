@@ -48,14 +48,29 @@ function session(state = load_session(), action) {
     }
 }
 
-function call(state = null, action) {
+function call(state = [], action) {
     switch (action.type) {
-        case 'call/connect': 
-            return action.data
+        case 'call/clear':
+            return []
+        case 'call/push': 
+            return [...state, action.data]
         default: 
             return state
     }
 }
+
+
+function room(state = null, action) {
+    switch (action.type) {
+        case 'room/set':
+            return action.data;
+        case 'room/clear':
+            return null;
+        default:
+            return state;
+    }
+}
+
 
 
 function user(state = null, action) {

@@ -34,6 +34,9 @@ defmodule Gitchat.RoomServer do
     GenServer.call(reg(room_id), {:join_c, room_id, username, peer_id})
   end
 
+  def join_user(room_id, username, peer_id) do
+    GenServer.call(reg(room_id), {:join_u, room_id, username, peer_id})
+  end
 
   # implementation
   def init(room) do
@@ -42,6 +45,12 @@ defmodule Gitchat.RoomServer do
 
   def handle_call({:join_c, room_id, username, peer_id}, _from, room) do
     room = Room.join_collaborator(room, username, peer_id)
+    BackupAgent.put(room_id, room)
+    {:reply, room, room}
+  end
+  
+  def handle_call({:join_u, room_id, username, peer_id}, _from, room) do
+    room = Room.join_user(room, username, peer_id)
     BackupAgent.put(room_id, room)
     {:reply, room, room}
   end
