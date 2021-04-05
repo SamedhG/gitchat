@@ -1,7 +1,7 @@
 import store from './store';
 export const BASE_URL =
     process.env.NODE_ENV === "production" ?
-    "http://gitchat.example.com/api/v1" :
+    "http://gitchat.samedh.site/api/v1" :
     "http://localhost:4000/api/v1";
 
 export async function api_get(path) {
