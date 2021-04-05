@@ -44,9 +44,9 @@ export function join(room_id, local_stream, call_setter) {
                     }, [])
 
                 // If they answer add them to the callers
-                calls.forEach((call) => call.on('stream', (remote_stream) => {
-                    console.log("answered call from ", call.metadata)
-                    call = [...call, {user: call.metadata.user, stream: remote_stream}]
+                calls.forEach((c) => c.on('stream', (remote_stream) => {
+                    console.log("answered call from ", c.metadata)
+                    call = [...call, {user: c.metadata.user, stream: remote_stream}]
                     call_setter(call) 
                 }))
 
@@ -56,11 +56,11 @@ export function join(room_id, local_stream, call_setter) {
     })
 
     // If someone calls you answer
-    peer.on('call', (call) => {
-        console.log("received call from ", call.metadata)
-        call.answer(local_stream)
-        call.on('stream', (remote_stream) => {
-            call = [...call, {user: call.metadata.user, stream: remote_stream}]
+    peer.on('call', (c) => {
+        console.log("received call from ", c.metadata)
+        c.answer(local_stream)
+        c.on('stream', (remote_stream) => {
+            call = [...call, {user: c.metadata.user, stream: remote_stream}]
             call_setter(call) 
         })
     })
