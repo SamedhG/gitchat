@@ -31,7 +31,7 @@ defmodule GitchatWeb.PageController do
 
   def get_user_repos(conn, %{"username" => username}) do
     repos = GithubAccess.get_user_repos(username)
-    fields = ["id", "name", "html_url"]
+    fields = ["id", "name", "html_url", "full_name"]
     filtered_repos = Enum.map(repos, fn repo -> Map.take(repo, fields) end)
     send_resp(conn, 200, Jason.encode!(%{"data": filtered_repos}))
   end

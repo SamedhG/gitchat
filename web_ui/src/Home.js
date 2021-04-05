@@ -1,27 +1,7 @@
-import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { load_user } from "./store";
-import { api_post, api_get } from "./api";
+import {Link} from 'react-router-dom';
 
 function Home({user, dispatch}) {
-
-  useEffect(async () => {
-    let userCredentials = load_user();
-    if (userCredentials) {
-      const requestData = {
-        access_token: userCredentials.access_token,
-      };
-
-      // Use code parameter and other parameters to make POST request to proxy_server
-      const userData = await api_post("/user/info", requestData);
-
-      const userRepos = await api_get(`/user/${userData.login}/repos`);
-      userData.repos = userRepos;
-      dispatch({type: 'user/set', data: userData});
-    }
-  }, []);
-
-  console.log(user);
 
   if (!user) {
     return <div>Please Login!</div>
@@ -44,7 +24,7 @@ function Home({user, dispatch}) {
         <tbody>
           {user.repos.map((repo) => (
               <tr key={repo.id}>
-                <td><a target={"_blank"} href={repo.html_url}>{repo.name}</a></td>
+                <td><Link to={`/room/${repo.full_name}`}>{repo.name}</Link></td>
               </tr>
           ))}
         </tbody>
@@ -53,4 +33,4 @@ function Home({user, dispatch}) {
   );
 }
 
-export default connect(({user}) => ({ user }))(Home);
+export default connect(({ user}) => ({ user }))(Home);

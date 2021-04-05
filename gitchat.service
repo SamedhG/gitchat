@@ -1,0 +1,17 @@
+[Unit]
+Description=GitChat Server
+
+[Service]
+Type=simple
+User=gitchat
+Group=gitchat
+Restart=on-failure
+Environment=MIX_ENV=prod
+Environment=PORT=4860
+Environment=PROD=true
+Environment=LANG=en_US.UTF-8
+
+WorkingDirectory=/home/gitchat/gitchat/server
+ExecStart=/bin/bash /home/gitchat/gitchat/_build/prod/rel/gitchat/bin/gitchat start
+[Install]
+WantedBy=multi-user.target
