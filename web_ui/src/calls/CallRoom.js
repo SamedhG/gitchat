@@ -8,27 +8,25 @@ import store from '../store';
 import UserCard from './UserCard';
 
 function Room({call}) {
-    return (JSON.stringify(call))
+    return call.map((c) => <UserCard mediaStream={c.stream} username={c.user}/>)
 }
 
-function CallRoom({call}) {
+export default function CallRoom() {
     const { repo_user, repo_name } = useParams();
     const [localStream, setLocalStream] = useState(null)
-    const [joined, setJoined] = useState(false);
+    const [call, setCall] = useState(null)
 
     async function onJoin() {
         let stream = await navigator.mediaDevices.getUserMedia({video: false, audio: true})
         setLocalStream(stream)
-        join(`${repo_user}/${repo_name}`, stream)
+        join(`${repo_user}/${repo_name}`, stream, setCall)
     }
 
     return (<>
         <h2>Room {repo_name} </h2>
         <h4> You </h4>
-        { localStream && <UserCard mediaStream = {localStream} /> }
-        { call && <Room call={call}/> }
-        { <Button onClick={onJoin}>Join</Button> }
+        { localStream && <UserCard mediaStream = {localStream} username="You" /> }
+        { call ? <Room call={call}/> : <Button onClick={onJoin}>Join</Button> }
     </>)
 }
 
-export default connect(({call})=>({call}))(CallRoom);

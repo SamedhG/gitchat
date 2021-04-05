@@ -26,7 +26,7 @@ function Login({ token, dispatch }) {
                     save_token(data.access_token);
                 });
 
-            history.push(newUrl[0]);
+            history.push("/");
         }
     });
 
