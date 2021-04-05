@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import {load_user, save_user} from "./store";
+import {api_post} from './api';
 
 function Login({ user, dispatch }) {
   const client_id = process.env.REACT_APP_CLIENT_ID;
@@ -22,22 +23,8 @@ function Login({ user, dispatch }) {
       window.history.pushState({}, null, newUrl[0]);
       const userCode = newUrl[1];
 
-
-      const requestData = {
-        code: userCode,
-      };
-
-      const proxy_url = "http://localhost:4000/api/v1/user/login";
-
       // Use code parameter and other parameters to make POST request to proxy_server
-      fetch(proxy_url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      })
-        .then((response) => response.json())
+        api_post("/user/login", {code: userCode})
         .then((data) => {
           save_user({access_token: data.access_token});
           setUserCredentials(data);

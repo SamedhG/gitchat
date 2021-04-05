@@ -2,6 +2,11 @@ import {Socket} from "phoenix"
 import store from '../store'
 import Peer from 'peerjs';
 
+
+const SOCKET_URL = process.NODE_ENV === "production" ?
+    "ws://gitchat.samedh.site/socket" :
+    "ws://localhost:4000/socket"
+
 export function join(room_id, local_stream) {
 
     let state = store.getState()
@@ -19,7 +24,7 @@ export function join(room_id, local_stream) {
 
     peer.on('open', (my_peer_id) =>  {
         
-        let socket = new Socket("ws://localhost:4000/socket", {params: {}})
+        let socket = new Socket(SOCKET_URL, {params: {}})
         socket.connect()
 
         // TODO: retrieve token from the session here
