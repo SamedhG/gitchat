@@ -13,41 +13,6 @@ function error(state = null, action) {
     }
 }
 
-
-function save_session(sess) {
-    let session = Object.assign({}, sess, {time: Date.now()});
-    localStorage.setItem("session", JSON.stringify(session));
-}
-
-function load_session() {
-    let session = localStorage.getItem("session");
-    if (!session) {
-        return null;
-    }
-    session = JSON.parse(session);
-    let age = Date.now() - session.time;
-    let hours = 60*60*1000;
-    if (age < 24 * hours) {
-        return session;
-    }
-    else {
-        return null;
-    }
-}
-
-function session(state = load_session(), action) {
-    switch (action.type) {
-        case 'session/set':
-            save_session(action.data);
-            return action.data;
-        case 'session/clear':
-            localStorage.removeItem("session");
-            return null;
-        default:
-            return state;
-    }
-}
-
 function call(state = [], action) {
     switch (action.type) {
         case 'call/clear':
@@ -72,7 +37,6 @@ function room(state = null, action) {
 }
 
 
-
 function user(state = null, action) {
     switch (action.type) {
         case 'user/set':
@@ -84,21 +48,32 @@ function user(state = null, action) {
     }
 }
 
-export function save_user(user){
-    localStorage.setItem("user", JSON.stringify(user));
+
+function token(state = load_token(), action) {
+    switch('action.type') {
+        case 'token/set':
+            return action.data
+        case 'token/clear':
+            localStorage.removeItem("token")
+            return null;
+        default: 
+            return state
+    }
 }
 
-export function load_user() {
-   return JSON.parse(localStorage.getItem("user"));
+export function save_token(token){
+    localStorage.setItem("token", JSON.stringify(token));
 }
 
-export function clear_user() {
-    localStorage.removeItem("user");
+export function load_token() {
+   return JSON.parse(localStorage.getItem("token"));
 }
+
+
 
 function root_reducer(state, action) {
     let reducer = combineReducers({
-        error, session, call, user
+        error, call, user, room, token
     });
     return reducer(state, action);
 }
