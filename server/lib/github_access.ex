@@ -49,6 +49,11 @@ defmodule GithubAccess do
     |> Enum.find_value(&if &1["primary"], do: &1["email"])
   end
 
+
+  def get_user_repos(%{"access_token" => access_token}) do
+    get_user_repos(access_token)
+  end
+
   def get_user_repos(access_token) do
     HTTPoison.get!("https://api.github.com/user/repos", [
       #  https://developer.github.com/v3/#user-agent-required
