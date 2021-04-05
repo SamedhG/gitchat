@@ -9,7 +9,7 @@ defmodule GitchatWeb.RoomChannel do
     case GithubAccess.check_authenticated(%{"access_token" => token}) do
       {:ok, user } -> 
         username = user.login
-        repos = GithubAccess.get_user_repos(username)
+        repos = GithubAccess.get_user_repos(token)
         RoomServer.start(id)
 
         room = if Enum.any?(repos, &(&1["full_name"] == id)) do 

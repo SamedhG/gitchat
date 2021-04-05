@@ -16,7 +16,7 @@ defmodule GitchatWeb.PageController do
     users = GithubAccess.search_users(conn.params["term"], conn.params["limit"])["items"]
     fields = ["avatar_url", "id", "login"]
     filtered_users = Enum.map(users, fn user -> Map.take(user, fields) end)
-    send_resp(conn, 200, Jason.encode!(%{"data": filtered_users}))
+    send_resp(conn, 200, Jason.encode!(%{data: filtered_users}))
   end
 
   def login(conn, %{"code" => code}) do
@@ -26,6 +26,10 @@ defmodule GitchatWeb.PageController do
 
   def get_user_profile(conn, token) do
     {:ok, profile} = GithubAccess.check_authenticated(token)
+    repos = GithubAccess.get_user_repos(token)
+    fields = ["id", "name", "html_url", "full_name"]
+    filtered_repos = Enum.map(repos, fn repo -> Map.take(repo, fields) end)
+    profile = Map.put(profile, :repos, filtered_repos) 
     send_resp(conn, 200, Jason.encode!(profile))
   end
 
@@ -33,7 +37,7 @@ defmodule GitchatWeb.PageController do
     repos = GithubAccess.get_user_repos(username)
     fields = ["id", "name", "html_url", "full_name"]
     filtered_repos = Enum.map(repos, fn repo -> Map.take(repo, fields) end)
-    send_resp(conn, 200, Jason.encode!(%{"data": filtered_repos}))
+    send_resp(conn, 200, Jason.encode!(%{data: filtered_repos}))
   end
 
 end

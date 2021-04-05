@@ -26,11 +26,8 @@ export async function api_post(path, data) {
 
 function load_user(token) {
     api_post("/user/info", {access_token: token}).then((data) => {
-            api_get(`/user/${data.login}/repos`).then((repos) => {
-                data.repos = repos
-                store.dispatch({type: 'user/set', data: data})
-            })
-        })
+        store.dispatch({type: 'user/set', data: data})
+    })
 }
 
 export function load_defaults() {
