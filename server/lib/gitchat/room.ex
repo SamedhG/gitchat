@@ -17,7 +17,7 @@ defmodule Gitchat.Room do
   # if the user is already in room the peer_id is replaced
   def join_user(st, username, peer_id) do
     users = [%{user: username, peer_id: peer_id } |
-      Enum.filter(st.users, &(&1.user == username))]
+      Enum.filter(st.users, &(&1.user != username))]
     %{st | users: users}
   end
 
@@ -25,19 +25,19 @@ defmodule Gitchat.Room do
   # if the user is already in room the peer_id is replaced
   def join_collaborator(st, username, peer_id) do
     collaborators = [%{user: username, peer_id: peer_id } |
-      Enum.filter(st.collaborators, &(&1.user == username))]
+      Enum.filter(st.collaborators, &(&1.user != username))]
     %{st | collaborators: collaborators}
   end
 
   # Remove a user from a channel 
   # does nothing if user is not in the room
   def remove_user(st, username) do
-    %{ st | users: Enum.filter(st.users, &(&1.user == username)) }
+    %{ st | users: Enum.filter(st.users, &(&1.user != username)) }
   end
 
   # Remove a user from a channel 
   # does nothing if user is not in the room
   def remove_collaborator(st, username) do
-    %{ st | collaborators: Enum.filter(st.collaborators, &(&1.user == username)) }
+    %{ st | collaborators: Enum.filter(st.collaborators, &(&1.user != username)) }
   end
 end

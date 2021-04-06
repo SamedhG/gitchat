@@ -4,7 +4,7 @@ import Peer from 'peerjs';
 
 
 const SOCKET_URL = process.NODE_ENV === "production" ?
-    "ws://gitchat.samedh.site/socket" :
+    "/socket" :
     "ws://localhost:4000/socket"
 
 export function join(room_id, local_stream, call_setter) {
@@ -12,14 +12,16 @@ export function join(room_id, local_stream, call_setter) {
     let state = store.getState()
     if (state.user == null) return;
 
-    call_setter(null)
     let call = []
+
+    call_setter(call)
 
     var peer = new Peer({
         config: {'iceServers': [
             { url: 'stun:stun.l.google.com:19302' },
         ]} 
     });
+
 
     peer.on('open', (my_peer_id) =>  {
 
@@ -42,9 +44,10 @@ export function join(room_id, local_stream, call_setter) {
                     }, [])
 
                 // If they answer add them to the callers
-                calls.forEach((call) => call.on('stream', (remote_stream) => {
-                    console.log("answered call from ", call.metadata)
-                    call_setter([...call, {user: call.metadata.user, stream: remote_stream}]) 
+                calls.forEach((c) => c.on('stream', (remote_stream) => {
+                    console.log("answered call from ", c.metadata)
+                    call = [...call, {user: c.metadata.user, stream: remote_stream}]
+                    call_setter(call) 
                 }))
 
                 store.dispatch({type: "room/set", data: x})
@@ -53,11 +56,12 @@ export function join(room_id, local_stream, call_setter) {
     })
 
     // If someone calls you answer
-    peer.on('call', (call) => {
-        console.log("received call from ", call.metadata)
-        call.answer(local_stream)
-        call.on('stream', (remote_stream) =>
-            call_setter([...call, {user: call.metadata.user, stream: remote_stream}]) 
-        )
+    peer.on('call', (c) => {
+        console.log("received call from ", c.metadata)
+        c.answer(local_stream)
+        c.on('stream', (remote_stream) => {
+            call = [...call, {user: c.metadata.user, stream: remote_stream}]
+            call_setter(call) 
+        })
     })
 }
