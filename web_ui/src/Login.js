@@ -24,9 +24,10 @@ function Login({ token, dispatch }) {
             api_post("/user/login", {code: userCode})
                 .then((data) => {
                     save_token(data.access_token);
+                })
+                .then(() => {
+                    history.push("/");
                 });
-
-            history.push("/");
         }
     });
 

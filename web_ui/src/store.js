@@ -48,6 +48,10 @@ function user(state = null, action) {
     }
 }
 
+export function load_user(){
+    return JSON.parse(localStorage.getItem("user"));
+}
+
 
 function token(state = load_token(), action) {
     switch('action.type') {
@@ -63,6 +67,7 @@ function token(state = load_token(), action) {
 
 export function save_token(token){
     localStorage.setItem("token", JSON.stringify(token));
+    console.log("token saved")
 }
 
 export function load_token() {

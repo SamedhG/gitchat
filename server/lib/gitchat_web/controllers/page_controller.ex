@@ -12,10 +12,12 @@ defmodule GitchatWeb.PageController do
     |> render(:welcome, profile: profile)
   end
 
-  def search_users(conn, %{}) do
-    users = GithubAccess.search_users(conn.params["term"], conn.params["limit"])["items"]
+  def search_users(conn, body) do
+    IO.inspect(body)
+    users = GithubAccess.search_users(body["term"], body["limit"], body["access_token"])["items"]
     fields = ["avatar_url", "id", "login"]
     filtered_users = Enum.map(users, fn user -> Map.take(user, fields) end)
+    IO.inspect(filtered_users)
     send_resp(conn, 200, Jason.encode!(%{data: filtered_users}))
   end
 
@@ -33,8 +35,10 @@ defmodule GitchatWeb.PageController do
     send_resp(conn, 200, Jason.encode!(profile))
   end
 
-  def get_user_repos(conn, %{"username" => username}) do
-    repos = GithubAccess.get_user_repos(username)
+  def get_user_repos(conn, body) do
+    access_token = body["access_token"]
+    username = body["username"]
+    repos = GithubAccess.get_user_repos(access_token, username)
     fields = ["id", "name", "html_url", "full_name"]
     filtered_repos = Enum.map(repos, fn repo -> Map.take(repo, fields) end)
     send_resp(conn, 200, Jason.encode!(%{data: filtered_repos}))

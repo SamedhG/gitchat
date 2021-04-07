@@ -24,10 +24,18 @@ export async function api_post(path, data) {
     return returnData;
 }
 
-function load_user(token) {
+export async function load_user(token) {
     api_post("/user/info", {access_token: token}).then((data) => {
         store.dispatch({type: 'user/set', data: data})
     })
+}
+
+export async function load_user_repos(token, username) {
+    return api_post(`/user/${username}/repos`, {access_token: token})
+}
+
+export async function load_user_search(token, query){
+    return api_post(`/search/users?term=${query}&limit=20`, {access_token: token})
 }
 
 export function load_defaults() {

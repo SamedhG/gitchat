@@ -1,15 +1,14 @@
 import './App.scss';
 import { Switch, Route } from 'react-router-dom';
 
-import Nav from './Nav';
 import Home from './Home';
 import CallRoom from './calls/CallRoom';
 import Login from './Login';
+import User from './User';
 
 function App() {
     return (
         <>
-            <Nav />
             <Switch>
                 <Route path="/" exact>
                     <Home />
@@ -18,6 +17,7 @@ function App() {
                 <Route path="/login" exact>
                     <Login />
                 </Route>
+                <Route path="/user/:user_name" component={User} />
             </Switch>
         </>
     );

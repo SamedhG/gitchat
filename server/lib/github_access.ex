@@ -64,8 +64,21 @@ defmodule GithubAccess do
     |> Poison.decode!()
   end
 
-  def search_users(term, limit) do
-    HTTPoison.get!("https://api.github.com/search/users?q=#{term}&per_page=#{limit}}", [])
+  def get_user_repos(access_token, username) do
+    HTTPoison.get!("https://api.github.com/users/#{username}/repos", [
+      #  https://developer.github.com/v3/#user-agent-required
+      {"User-Agent", "ElixirAuthGithub"},
+      {"Authorization", "token #{access_token}"}
+    ])
+    |> Map.get(:body)
+    |> Poison.decode!()
+  end
+
+  def search_users(term, limit, access_token) do
+    HTTPoison.get!("https://api.github.com/search/users?q=#{term}&per_page=#{limit}}", [
+        {"User-Agent", "ElixirAuthGithub"},
+        {"Authorization", "token #{access_token}"}
+    ])
     |> Map.get(:body)
     |> Poison.decode!()
   end
