@@ -26,6 +26,7 @@ defmodule GitchatWeb.Router do
     post "/user/info", PageController, :get_user_profile
     post "/user/:username/repos", PageController, :get_user_repos
     post "/search/users", PageController, :search_users
+    post "/user/recent", PageController, :add_recent
 
   end
 

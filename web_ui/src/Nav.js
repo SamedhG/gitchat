@@ -1,6 +1,6 @@
 import { AsyncTypeahead } from "react-bootstrap-typeahead";
 import React, { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { load_user_search } from "./api"
 
@@ -8,6 +8,7 @@ import { load_user_search } from "./api"
 function Nav({ token, dispatch }) {
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState([]);
+  const history = useHistory();
 
   const handleSearch = async (query) => {
     setIsLoading(true);
@@ -17,6 +18,11 @@ function Nav({ token, dispatch }) {
 
     setOptions(items.data);
     setIsLoading(false);
+  };
+
+  const clickUser = users => {
+      const user = users[0];
+      history.push(`/user/${user.login}`, {user})
   };
 
   const filterBy = () => true;
@@ -29,6 +35,7 @@ function Nav({ token, dispatch }) {
       labelKey="login"
       minLength={3}
       onSearch={handleSearch}
+      onChange={clickUser}
       options={options}
       placeholder="Search for a Github user..."
       renderMenuItemChildren={(option, props) => (
@@ -42,9 +49,7 @@ function Nav({ token, dispatch }) {
               width: "24px",
             }}
           />
-          <span>
-            <Link to={`/user/${option.login}`}>{option.login}</Link>
-          </span>
+          <span>{option.login}</span>
         </Fragment>
       )}
     />
