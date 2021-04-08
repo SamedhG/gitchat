@@ -39,8 +39,10 @@ defmodule GitchatWeb.PageController do
     filtered_repos = Enum.map(repos, fn repo -> Map.take(repo, fields) end)
     user = Users.get_user_by_name(profile[:login])
     recents = GitchatWeb.RecentController.get_by_user(%{"user_id" => user.id})
+    favorites = GitchatWeb.FavoriteController.get_by_user(%{"user_id" => user.id})
     profile = Map.put(profile, :repos, filtered_repos)
     profile = Map.put(profile, :recents, recents)
+    profile = Map.put(profile, :favorites, favorites)
     send_resp(conn, 200, Jason.encode!(profile))
   end
 
@@ -58,6 +60,13 @@ defmodule GitchatWeb.PageController do
     Recents.create_recent(%{"user_id": user.id, "repo": repo, "url": url})
     recents = GitchatWeb.RecentController.get_by_user(%{"user_id" => user.id})
     send_resp(conn, 200, Jason.encode!(%{recents: recents}))
+  end
+
+  def toggle_favorite(conn, %{"user" => user, "repo" => repo, "url" => url}) do
+    user = Users.get_user_by_name(user)
+    GitchatWeb.FavoriteController.create_or_delete(user.id, repo, url)
+    favorites = GitchatWeb.FavoriteController.get_by_user(%{"user_id" => user.id})
+    send_resp(conn, 200, Jason.encode!(%{favorites: favorites}))
   end
 
 end

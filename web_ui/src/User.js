@@ -1,20 +1,20 @@
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
-import {Link, useLocation, useParams} from "react-router-dom";
-import {load_user_repos} from "./api";
+import {Link, useLocation, useParams, useHistory} from "react-router-dom";
+import {api_post, load_user_repos} from "./api";
 import {Button} from "react-bootstrap";
+import Heart from "react-animated-heart";
 
-function User({token, dispatch}) {
+function User({token, user, dispatch}) {
     const location = useLocation();
     const params = useParams();
-    const user = location.state?.user || {login: params.user_name};
-    console.log(token);
+    const history = useHistory();
+    const searched_user = location.state?.user || {login: params.user_name};
 
     const [userData, setUserData] = useState([]);
 
     useEffect(async () => {
-        let data = await load_user_repos(token, user.login);
-        console.log(data);
+        let data = await load_user_repos(token, searched_user.login);
         setUserData(data);
     }, []);
 
@@ -22,12 +22,29 @@ function User({token, dispatch}) {
         return null;
     }
 
+    const joinCall = async repo => {
+        const body = {repo: repo.full_name, url: repo.html_url, user: user.login};
+        const data = (await api_post("/user/recent", body)).recents;
+        dispatch({type: 'user/set', data: {...user, recents: data}});
+        history.push(`/room/${repo.full_name}`);
+    };
+
+    const isFavorited = repo => {
+        return user.favorites.filter(favorite => favorite.repo === repo.full_name).length
+    };
+
+    const toggleFavorite = async repo => {
+        const body = {repo: repo.full_name, url: repo.html_url, user: user.login};
+        const data = (await api_post("/user/favorite", body)).favorites;
+        dispatch({type: 'user/set', data: {...user, favorites: data}});
+    };
+
     return (
         <div>
             <h2>
             <div>
-                {user.login}{" "}
-                {user.avatar_url && <img style={{width: "50px"}} src={user.avatar_url} alt={"Avatar"}/>}
+                {searched_user.login}{" "}
+                {searched_user.avatar_url && <img style={{width: "50px"}} src={searched_user.avatar_url} alt={"Avatar"}/>}
             </div>
             </h2>
 
@@ -36,18 +53,21 @@ function User({token, dispatch}) {
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th></th>
+                        <th/>
+                        <th/>
                     </tr>
                 </thead>
                 <tbody>
-                    {console.log(userData)}
                     {userData.data.map(repo => (
                         <tr key={repo.id}>
                             <td>
                                 <a href={repo.html_url} target="_blank" rel="noreferrer">{repo.name}</a>
                             </td>
+                            <td style={{padding: 0}}>
+                                <Heart isClick={isFavorited(repo)} onClick={() => toggleFavorite(repo)}/>
+                            </td>
                             <td>
-                                <Link to={`/room/${repo.full_name}`}>Join Call</Link>
+                                <Button onClick={() => joinCall(repo)}>Join Call</Button>
                             </td>
                         </tr>
                     ))}
@@ -60,4 +80,4 @@ function User({token, dispatch}) {
     );
 }
 
-export default connect(({token}) => ({token}))(User);
+export default connect(({token, user}) => ({token, user}))(User);
