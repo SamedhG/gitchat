@@ -1,26 +1,52 @@
 import { Card } from 'react-bootstrap'
 import Visualizer from './Visualizer'
-import ToggleButton from 'react-bootstrap/ToggleButton';
+import Button from 'react-bootstrap/Button';
+import { useState } from 'react'
+import muteIcon from './mic-fill.svg';
+import unmute from './mic-mute-fill.svg';
 
 export default function UserCard({username, mediaStream}) {
-    //assuming we have user username?
-    //and the path(?) to profile picture
+    const [showButton, setShowButton] = useState(false); //mute button appears on hover
+    const [mute, setMute] = useState(false); //are we muted?
+    /**
+     * TODO:
+     * 1. Fix the visualizer on the bottom
+     * 2. Make mute button less aggressive
+     */
+
+    //handle clicking mute/unmute
+    function toggleMute() {
+        mediaStream.getTracks()[0].enabled = !mediaStream.getTracks()[0].enabled;
+        setMute(!mute);
+    }
+
+    //render the mute/unmute button
+    function muteButton() {
+        if(mute) {
+            return (<Button variant="primary" onClick={() => toggleMute()}><img src={unmute}/></Button>);
+        }
+        else {
+            return (<Button variant="primary" onClick={() => toggleMute()}><img src={muteIcon}/></Button>);
+        }
+    }
+
+    //url to profile picture
+    function profilePicturePath() {
+        console.log("github.com/" + username + ".png");
+        return "https://github.com/" + username + ".png"
+    }
+
 
     return (
-        <Card className="text-center" style={{ width: '18rem' }}>
-            <Card.Img src="https://img.webmd.com/dtmcms/live/webmd/consumer_assets/site_images/article_thumbnails/other/cat_relaxing_on_patio_other/1800x1200_cat_relaxing_on_patio_other.jpg?resize=750px:*" alt="Profile Picture" />
-            <Card.ImgOverlay>
-                <Card.Body>
-                    <Card.Header>{username}</Card.Header>
-                    <Visualizer mediaStream={mediaStream} />
-                    <ToggleButton
-                    type="checkbox"
-                    variant="primary"
-                    value={1}
-                    >Hello</ToggleButton>
-                </Card.Body> 
-            </Card.ImgOverlay>
-        </Card>
+            <Card className="text-center" style={{ width: '200px', height: '200px'}} onMouseEnter={() => setShowButton(true)} onMouseLeave={() => setShowButton(false)}>
+                <Card.Img src={profilePicturePath()} alt="Profile Picture" style={{ width: '200px', height: '200px'}} />
+                <Card.ImgOverlay>
+                    <Card.Body>
+                        <div style={{height: '30%'}}>{showButton ? 
+                            muteButton() : <Button variant= 'primary' style={{visibility: 'hidden'} }>Yeet</Button>}</div>
+                        <div><Visualizer style={{position: "absolute", bottom: 0}} mediaStream={mediaStream} /></div> 
+                    </Card.Body>
+                </Card.ImgOverlay>
+            </Card>
     )
-
 }

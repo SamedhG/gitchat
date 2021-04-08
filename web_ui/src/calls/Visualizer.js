@@ -37,8 +37,8 @@ export default function Visualizer({mediaStream}) {
         audioSrc.connect(analyser);
         if (analyserCanvas.current) {
             const ctx = analyserCanvas.current.getContext('2d');
-            analyserCanvas.current.width = 40
-            analyserCanvas.current.height = 40
+            analyserCanvas.current.width = 100
+            analyserCanvas.current.height = 50
             loopingFunction(ctx); 
         }
     })
