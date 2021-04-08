@@ -54,7 +54,7 @@ export function load_user(){
 
 
 function token(state = load_token(), action) {
-    switch('action.type') {
+    switch(action.type) {
         case 'token/set':
             return action.data
         case 'token/clear':

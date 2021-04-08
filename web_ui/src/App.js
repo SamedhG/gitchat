@@ -5,6 +5,9 @@ import Home from './Home';
 import CallRoom from './calls/CallRoom';
 import Login from './Login';
 import User from './User';
+import Nav from './Nav'
+import {load_token} from "./store"
+import { useEffect, useState } from 'react';
 
 function App() {
     return (

@@ -4,6 +4,7 @@ import {Link, useLocation, useParams, useHistory} from "react-router-dom";
 import {api_post, load_user_repos} from "./api";
 import {Button} from "react-bootstrap";
 import Heart from "react-animated-heart";
+import Nav from "./Nav"
 
 function User({token, user, dispatch}) {
     const location = useLocation();
@@ -41,6 +42,7 @@ function User({token, user, dispatch}) {
 
     return (
         <div>
+            <Nav />
             <h2>
             <div>
                 {searched_user.login}{" "}
@@ -73,9 +75,6 @@ function User({token, user, dispatch}) {
                     ))}
                 </tbody>
             </table>
-            <div>
-                <Link to="/" className="btn btn-secondary">Home</Link>
-            </div>
         </div>
     );
 }

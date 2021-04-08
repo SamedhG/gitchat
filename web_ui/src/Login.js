@@ -36,8 +36,8 @@ function Login({ token, dispatch }) {
     }
 
     return (
-        <div>
-            <a
+        <div style={{display: "flex", justifyContent:'center', marginTop:'100px'}}>
+            <a className="btn btn-primary" style={{padding:'2rem 5rem', fontSize:'1.5rem'}}
                 href={`https://github.com/login/oauth/authorize?scope=user&client_id=${client_id}&redirect_uri=${redirect_uri}`}
             >
                 {" "}

@@ -1,11 +1,14 @@
 import { AsyncTypeahead } from "react-bootstrap-typeahead";
 import React, { Fragment, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
-import { load_user_search } from "./api"
-
+import { load_user_search } from "./api";
+import { load_token } from "./store";
+import { Navbar, Button } from "react-bootstrap";
+import store from './store';
 
 function Nav({ token, dispatch }) {
+  token = token || load_token();
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState([]);
   const history = useHistory();
@@ -13,22 +16,31 @@ function Nav({ token, dispatch }) {
   const handleSearch = async (query) => {
     setIsLoading(true);
     const items = await load_user_search(token, query);
-    console.log(items)
-
+    console.log(items);
 
     setOptions(items.data);
     setIsLoading(false);
   };
 
-  const clickUser = users => {
-      const user = users[0];
-      history.push(`/user/${user.login}`, {user})
+  const clickUser = (users) => {
+    const user = users[0];
+    history.push(`/user/${user.login}`, { user });
   };
+
+  function logout(ev) {
+    store.dispatch({type:'token/clear'});
+    store.dispatch({type:'user/clear'});
+    history.push('/')
+  }
+
+  function home(ev) {
+      history.push('/')
+  }
 
   const filterBy = () => true;
 
-  return (
-    <AsyncTypeahead
+  return ( <Navbar>
+      <AsyncTypeahead
       filterBy={filterBy}
       id="search_users"
       isLoading={isLoading}
@@ -53,8 +65,12 @@ function Nav({ token, dispatch }) {
         </Fragment>
       )}
     />
+    <Button className="btn btn-secondary" style={{margin:"10px"}} onClick={logout}>Logout</Button>
+    <Button className="btn btn-secondary" onClick={home}>Home</Button>
+
+  </Navbar>
+    
   );
 }
 
-export default connect(({ token }) => ({token }))(Nav);
-
+export default connect(({ token }) => ({ token }))(Nav);
