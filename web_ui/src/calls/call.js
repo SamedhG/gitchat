@@ -15,7 +15,14 @@ export function join(room_id, local_stream, call_setter) {
     let call = []
 
     call_setter(call)
-
+    
+    function add_caller(stream, user) {
+        let caller = {user: user, stream: stream}
+        call = call.filter(c => c.user !== user)
+        call.push(caller)
+        call_setter(call)
+    }
+    
     var peer = new Peer({
         config: {'iceServers': [
             { url: 'stun:stun.l.google.com:19302' },
@@ -27,6 +34,8 @@ export function join(room_id, local_stream, call_setter) {
 
         let socket = new Socket(SOCKET_URL, {params: {}})
         socket.connect()
+        
+        const me = {user: state.user.login, peer_id: my_peer_id}
 
         let channel = socket.channel("room:" + room_id, 
             {token: state.user.access_token , peer_id: my_peer_id})
@@ -39,15 +48,14 @@ export function join(room_id, local_stream, call_setter) {
                     (acc, caller) => {
                         if(state.user.login !== caller.user) {
                             peer.connect(caller.peer_id)
-                            return [...acc, peer.call(caller.peer_id, local_stream, {metadata: caller})]
+                            return [...acc, peer.call(caller.peer_id, local_stream, {metadata: me})]
                         } else { return acc }
                     }, [])
 
                 // If they answer add them to the callers
                 calls.forEach((c) => c.on('stream', (remote_stream) => {
                     console.log("answered call from ", c.metadata)
-                    call = [...call, {user: c.metadata.user, stream: remote_stream}]
-                    call_setter(call) 
+                    add_caller(remote_stream, c.metadata.user)
                 }))
 
                 store.dispatch({type: "room/set", data: x})
@@ -60,8 +68,7 @@ export function join(room_id, local_stream, call_setter) {
         console.log("received call from ", c.metadata)
         c.answer(local_stream)
         c.on('stream', (remote_stream) => {
-            call = [...call, {user: c.metadata.user, stream: remote_stream}]
-            call_setter(call) 
+            add_caller(remote_stream, c.metadata.user)
         })
     })
 }
