@@ -72,8 +72,8 @@ export function join(room_id, stream, setCall) {
         // Everyone wants to connect to a collaborator
         let c = peer.call(peer_id, local_stream, {metadata: me})
         c.on('stream', (remote_stream) => {
-            console.log("answered call from ", JSON.stringify(c.metadata))
-            add_caller(remote_stream, c.metadata.user)
+            console.log("answered call from ", JSON.stringify(caller))
+            add_caller(remote_stream, caller.user)
         })
         store.dispatch({type: "room/collaborator", data: caller})
     }, 1000))
