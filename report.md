@@ -1,8 +1,8 @@
 # Project Overview
 
-Team: Rohit Pathak, Samedh Gupta, Hannah Weiss, Angela Hu
-URL of deployed app: https://gitchat.samedh.site
-URL of Github Repo: https://github.com/SamedhG/gitchat
+ - Team: Rohit Pathak, Samedh Gupta, Hannah Weiss, Angela Hu
+ - URL of deployed app: https://gitchat.samedh.site
+ - URL of Github Repo: https://github.com/SamedhG/gitchat
 
 We were able to successfully deploy our app. 
 Each team member's contributions are outlined below.
