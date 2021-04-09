@@ -221,20 +221,21 @@ function Home({ user, token, dispatch }) {
             </tbody>
           </table>
         </div>
+        {user.requests.length &&
         <div className={"col"}>
           <h3>Friend Requests</h3>
           <table className={"table table-striped"}>
             <thead>
               <tr>
                 <th>Name</th>
-                <th />
+                <th/>
               </tr>
             </thead>
             <tbody>
               {user.requests.map((request) => (
                   <tr key={request.id}>
                     <td>
-                      <img style={{ width: "25px" }} src={request.inviter.avatar_url} alt={"Avatar"} />
+                      <img style={{width: "25px"}} src={request.inviter.avatar_url} alt={"Avatar"}/>
                       <Link to={{
                         pathname: `/user/${request.inviter.name}`,
                         state: {
@@ -250,6 +251,7 @@ function Home({ user, token, dispatch }) {
             </tbody>
           </table>
         </div>
+        }
         <div className={"col"}>
           <h3>Your Friends</h3>
           <table className={"table table-striped"}>
