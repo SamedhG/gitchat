@@ -50,19 +50,29 @@ defmodule Gitchat.RoomServer do
   def handle_call({:join_c, room_id, username, peer_id}, _from, room) do
     room = Room.join_collaborator(room, username, peer_id)
     BackupAgent.put(room_id, room)
+    send_update(room_id, "collaborator", %{user: username, peer_id: peer_id}) 
     {:reply, room, room}
   end
   
   def handle_call({:join_u, room_id, username, peer_id}, _from, room) do
     room = Room.join_user(room, username, peer_id)
     BackupAgent.put(room_id, room)
+    send_update(room_id, "user", %{user: username, peer_id: peer_id}) 
     {:reply, room, room}
   end
   
   def handle_call({:leave, room_id, username}, _from, room) do
     room = Room.leave(username)
     BackupAgent.put(room_id, room)
+    send_update(room_id, "leave", %{user: username}) 
     {:reply, room, room}
   end
 
+
+defp send_update(id, type, message) do
+    GitchatWeb.Endpoint.broadcast!(
+      "room:"<> id,
+      type,
+      message)
+  end
 end

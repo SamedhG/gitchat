@@ -31,7 +31,6 @@ defmodule GitchatWeb.RoomChannel do
   end
 
 
-  # TODO: These 2 need to broadcvasr
   @impl true
   def handle_in("leave", _payload, socket) do
     user = socket.assigns[:username]
@@ -45,7 +44,7 @@ defmodule GitchatWeb.RoomChannel do
     case socket.assigns[:role] do
       :collaborator ->
         room_id = socket.assigns[:room_id]
-        room = RoomServer.leave(username)
+        room = RoomServer.leave(room_id, username)
         {:ok, room, socket}
       :user ->
         {:error, %{reason: "Unauthorized" } }
