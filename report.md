@@ -75,6 +75,11 @@ working on that repo or interested in hearing about it. We used
 phoenix channels to implement this realtime functionality of joining a
 voice call. 
 
+The most complex feature that we implemented was the live call
+feature. FILL IN HERE
+
+SIGNIFICANT CHALLENGE 
+
 
 
 
