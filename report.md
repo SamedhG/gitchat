@@ -27,15 +27,15 @@ Our app is called GitChat, and it integrates with the Github API to
 provide users a platform to talk with other Github users about
 different repos. The goal of this app is to create better channels
 of communication for people working on the same code, something that
-is especially important duing Covid-19. GitChat uses the WebRTC 
+is especially important during Covid-19. GitChat uses the WebRTC 
 and PeerJS libraries that allow users to make voice calls with other 
 people on the app. 
 
 Since we wrote our proposal, we have had to scale down some of our
 ideas in order to make the project more feasible to complete in the
 time that we had. The main thing that changed was how
-non-collaborators interat with calls on the platform. In the
-proposal we described a queue system where somone who is not a
+non-collaborators interact with calls on the platform. In the
+proposal we described a queue system where someone who is not a
 collaborator for a repo can join a call for that repo, and then join a
 talking queue if they want to say something during the call. However,
 we found that this was very difficult to implement. The call system is
@@ -59,7 +59,7 @@ respond individually to issues. It also gives non-collaborators to
 listen to the collaborators and their design process, approach to 
 bug-fixes, future directions, etc.
 
-This project contianed more features than the other apps that we have
+This project contained more features than the other apps that we have
 worked on during this class. With implementing the voice calls, Github
 authorization, and friend feature, we combined what we learned in
 class with new concepts we learned during the development of this app
@@ -77,7 +77,7 @@ friends, their starred repositories, and their call history. The
 history allows users to quickly access the repos they have joined a
 call on recently to jump on a call again with other collaborators. The
 friends feature is integrated throughout Gitchat so that users can
-have an insightful view of what their friends and colleages are
+have an insightful view of what their friends and colleagues are
 working on. 
 
 The neat feature that we chose to implement was the voice call
