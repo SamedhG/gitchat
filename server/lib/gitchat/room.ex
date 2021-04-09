@@ -31,13 +31,10 @@ defmodule Gitchat.Room do
 
   # Remove a user from a channel 
   # does nothing if user is not in the room
-  def remove_user(st, username) do
-    %{ st | users: Enum.filter(st.users, &(&1.user != username)) }
+  def leave(st, username) do
+    %{ st | 
+      users: Enum.filter(st.users, &(&1.user != username)),
+      collaborators: Enum.filter(st.collaborators, &(&1.user != username)) }
   end
 
-  # Remove a user from a channel 
-  # does nothing if user is not in the room
-  def remove_collaborator(st, username) do
-    %{ st | collaborators: Enum.filter(st.collaborators, &(&1.user != username)) }
-  end
 end

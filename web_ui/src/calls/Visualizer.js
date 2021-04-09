@@ -1,10 +1,15 @@
-import { useRef, useEffect} from 'react'
+import { useRef, useEffect, useState} from 'react'
 
-const audioCtx = new AudioContext(); 
-const analyser = audioCtx.createAnalyser();
-analyser.fftSize = 32;     
 
 export default function Visualizer({mediaStream}) {
+
+    let [audioCtx, _setAudioCtx] = useState(() => new AudioContext())  
+    let [analyser, _setAnalyzer] = useState(() => {
+        const analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 32
+        return analyser
+    })
+
     const analyserCanvas = useRef(null);
     let data = new Uint8Array(analyser.frequencyBinCount)
     const audioSrc = audioCtx.createMediaStreamSource(mediaStream);
@@ -37,8 +42,8 @@ export default function Visualizer({mediaStream}) {
         audioSrc.connect(analyser);
         if (analyserCanvas.current) {
             const ctx = analyserCanvas.current.getContext('2d');
-            analyserCanvas.current.width = 40
-            analyserCanvas.current.height = 40
+            analyserCanvas.current.width = 100
+            analyserCanvas.current.height = 50
             loopingFunction(ctx); 
         }
     })
