@@ -5,8 +5,8 @@ import { useState } from 'react'
 import muteIcon from './mic-fill.svg';
 import unmute from './mic-mute-fill.svg';
 
-export default function UserCard({username, mediaStream}) {
-    const [showButton, setShowButton] = useState(false); //mute button appears on hover
+export default function UserCard({username, mediaStream, play}) {
+    const [showButton, setShowButton] = useState(false); // mute button appears on hover
     const [mute, setMute] = useState(false); //are we muted?
     /**
      * TODO:
@@ -23,30 +23,49 @@ export default function UserCard({username, mediaStream}) {
     //render the mute/unmute button
     function muteButton() {
         if(mute) {
-            return (<Button variant="primary" onClick={() => toggleMute()}><img src={unmute}/></Button>);
+            return ( <Button variant="secondary" 
+                onClick={() => toggleMute()}>
+                <img src={unmute} alt="unmute"/>
+            </Button>);
         }
         else {
-            return (<Button variant="primary" onClick={() => toggleMute()}><img src={muteIcon}/></Button>);
+            return ( <Button 
+                variant="secondary" 
+                onClick={() => toggleMute()}>
+                <img src={muteIcon} alt="mute"/>
+            </Button>);
         }
     }
 
     //url to profile picture
     function profilePicturePath() {
-        console.log("github.com/" + username + ".png");
         return "https://github.com/" + username + ".png"
     }
 
 
     return (
-            <Card className="text-center" style={{ width: '200px', height: '200px'}} onMouseEnter={() => setShowButton(true)} onMouseLeave={() => setShowButton(false)}>
-                <Card.Img src={profilePicturePath()} alt="Profile Picture" style={{ width: '200px', height: '200px'}} />
-                <Card.ImgOverlay>
-                    <Card.Body>
-                        <div style={{height: '30%'}}>{showButton ? 
-                            muteButton() : <Button variant= 'primary' style={{visibility: 'hidden'} }>Yeet</Button>}</div>
-                        <div><Visualizer style={{position: "absolute", bottom: 0}} mediaStream={mediaStream} /></div> 
-                    </Card.Body>
-                </Card.ImgOverlay>
-            </Card>
+        <Card className="text-center" style={{ width: '200px', height: '200px'}} 
+            onMouseEnter={() => setShowButton(true)} 
+            onMouseLeave={() => setShowButton(false)}>
+            <Card.Img 
+                src={profilePicturePath()} alt="Profile Picture" 
+                style={{ width: '200px', height: '200px'}} />
+            <Card.ImgOverlay>
+                <Card.Body style ={{display: "flex", flexDirection: "column"}}>
+                    {username}
+                    {showButton && muteButton()}
+                    {play && 
+                        <audio 
+                            autoPlay={true} 
+                            ref={audio => {if (audio) audio.srcObject = mediaStream}}
+                            style = {{width: 0}}/>}
+
+                    <div style={{marginTop: "auto"}}>
+                        <Visualizer mediaStream={mediaStream} />
+                    </div> 
+
+                </Card.Body>
+            </Card.ImgOverlay>
+        </Card>
     )
 }
