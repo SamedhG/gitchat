@@ -18,7 +18,6 @@ Hannah
 - Worked on the frontend workflow and UI design
 - Home page and the user page
 
-
 Angela
 
 
@@ -46,6 +45,19 @@ user's collaborator status for a given repo is received from the
 Github API. Our proposal also included an idea of flagging users who
 were known to be trolls or create a negative experience on the app, 
 which we did not end up implementing.
+
+Users can interact with the application in a web browser. They can 
+sign in using a pre-existing GitHub account and get redirected to a 
+page showing a list of their repositories. Within each repository of 
+which the user is a collaborator, they have the option to click a 
+button to start a voice call within that repository. Other collaborators 
+as well as non-collaborating users can join the call, but 
+non-collaborators do not have the option to start calls or to speak 
+during a call. The audio call gives the ability for collaborators to 
+discuss the project in one place at the same time without having to 
+respond individually to issues. It also gives non-collaborators to 
+listen to the collaborators and their design process, approach to 
+bug-fixes, future directions, etc.
 
 This project contianed more features than the other apps that we have
 worked on during this class. With implementing the voice calls, Github
@@ -76,9 +88,9 @@ phoenix channels to implement this realtime functionality of joining a
 voice call. 
 
 The most complex feature that we implemented was the live call
-feature. FILL IN HERE
+feature. **FILL IN HERE**
 
-SIGNIFICANT CHALLENGE 
+**SIGNIFICANT CHALLENGE** 
 
 
 
