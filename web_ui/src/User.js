@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
-import {Link, useLocation, useParams, useHistory} from "react-router-dom";
-import {api_post, load_user_repos} from "./api";
+import {useLocation, useParams, useHistory} from "react-router-dom";
+import {api_post, load_user, load_user_repos} from "./api";
 import {Button} from "react-bootstrap";
 import Heart from "react-animated-heart";
 import Nav from "./Nav"
@@ -15,9 +15,17 @@ function User({token, user, dispatch}) {
     const [userData, setUserData] = useState([]);
 
     useEffect(async () => {
-        let data = await load_user_repos(token, searched_user.login);
-        setUserData(data);
-    }, []);
+        if (token) {
+            let data = await load_user_repos(token, searched_user.login);
+            setUserData(data);
+        }
+    }, [searched_user.login]);
+
+    useEffect(() => {
+        if (token && !user) {
+            load_user(token);
+        }
+    }, [token]);
 
     if (!userData.data) {
         return null;
@@ -40,6 +48,15 @@ function User({token, user, dispatch}) {
         dispatch({type: 'user/set', data: {...user, favorites: data}});
     };
 
+    const sendFriendRequest = async () => {
+        const body = {inviter: user.login, invitee: searched_user.login};
+        await api_post("/user/request/send", body);
+    };
+
+    if (!user) {
+        return null;
+    }
+
     return (
         <div>
             <Nav />
@@ -50,7 +67,7 @@ function User({token, user, dispatch}) {
             </div>
             </h2>
 
-            <Button>Add Friend</Button>
+            <Button onClick={() => sendFriendRequest()}>Add Friend</Button>
             <table className={"table table-striped"} style={{width: "50%"}}>
                 <thead>
                     <tr>

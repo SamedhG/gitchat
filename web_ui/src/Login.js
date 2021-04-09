@@ -23,7 +23,7 @@ function Login({ token, dispatch }) {
             // Use code parameter and other parameters to make POST request to proxy_server
             api_post("/user/login", {code: userCode})
                 .then((data) => {
-                    save_token(data.access_token);
+                    dispatch({ type: "token/set", data: data.access_token });
                 })
                 .then(() => {
                     history.push("/");

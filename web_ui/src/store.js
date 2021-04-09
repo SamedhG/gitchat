@@ -17,9 +17,9 @@ function call(state = [], action) {
     switch (action.type) {
         case 'call/clear':
             return []
-        case 'call/push': 
+        case 'call/push':
             return [...state, action.data]
-        default: 
+        default:
             return state
     }
 }
@@ -56,11 +56,12 @@ export function load_user(){
 function token(state = load_token(), action) {
     switch(action.type) {
         case 'token/set':
-            return action.data
+            save_token(action.data);
+            return action.data;
         case 'token/clear':
             localStorage.removeItem("token")
             return null;
-        default: 
+        default:
             return state
     }
 }

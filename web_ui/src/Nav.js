@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 import { load_user_search } from "./api";
 import { load_token } from "./store";
 import { Navbar, Button } from "react-bootstrap";
-import store from './store';
 
 function Nav({ token, dispatch }) {
   token = token || load_token();
@@ -23,13 +22,15 @@ function Nav({ token, dispatch }) {
   };
 
   const clickUser = (users) => {
-    const user = users[0];
-    history.push(`/user/${user.login}`, { user });
+      if (users) {
+          const user = users[0];
+          history.push(`/user/${user.login}`, {user});
+      }
   };
 
   function logout(ev) {
-    store.dispatch({type:'token/clear'});
-    store.dispatch({type:'user/clear'});
+    dispatch({type:'token/clear'});
+    dispatch({type:'user/clear'});
     history.push('/')
   }
 
@@ -69,7 +70,7 @@ function Nav({ token, dispatch }) {
     <Button className="btn btn-secondary" onClick={home}>Home</Button>
 
   </Navbar>
-    
+
   );
 }
 

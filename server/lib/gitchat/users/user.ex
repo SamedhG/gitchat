@@ -4,6 +4,7 @@ defmodule Gitchat.Users.User do
 
   schema "users" do
     field :name, :string
+    field :avatar_url, :string
     has_many :recents, Gitchat.Recents.Recent
 
     timestamps()
@@ -12,7 +13,7 @@ defmodule Gitchat.Users.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:name])
-    |> validate_required([:name])
+    |> cast(attrs, [:name, :avatar_url])
+    |> validate_required([:name, :avatar_url])
   end
 end

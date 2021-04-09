@@ -12,6 +12,8 @@ defmodule GitchatWeb.UserView do
 
   def render("user.json", %{user: user}) do
     %{id: user.id,
-      name: user.name}
+      name: user.name,
+      avatar_url: user.avatar_url
+    }
   end
 end

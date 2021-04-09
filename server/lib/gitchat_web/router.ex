@@ -28,6 +28,8 @@ defmodule GitchatWeb.Router do
     post "/search/users", PageController, :search_users
     post "/user/recent", PageController, :add_recent
     post "/user/favorite", PageController, :toggle_favorite
+    post "/user/request/send", PageController, :send_friend_request
+    post "/user/request/accept", PageController, :accept_friend_request
 
   end
 

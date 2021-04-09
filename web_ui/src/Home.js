@@ -60,6 +60,29 @@ function Home({ user, token, dispatch }) {
     dispatch({ type: "user/set", data: { ...user, favorites: data } });
   };
 
+  const acceptFriendRequest = async request => {
+    const body = { inviter_id: request.inviter.id, invitee: user.login };
+    const data = await api_post("/user/request/accept", body);
+    dispatch({ type: "user/set", data: { ...user, requests: data.requests, friends: data.friends } });
+  };
+
+  const renderFriend = pair => {
+    const friend = pair.inviter.name === user.login ? pair.invitee : pair.inviter;
+    return (
+        <tr key={pair.id}>
+          <td>
+            <img style={{ width: "25px" }} src={friend.avatar_url} alt={"Avatar"} />
+            <Link to={{
+              pathname: `/user/${friend.name}`,
+              state: {
+                user: {...friend, login: friend.name}
+              }
+            }}>{friend.name}</Link>
+          </td>
+        </tr>
+    )
+  };
+
   return (
     <div>
       <Nav />
@@ -195,6 +218,48 @@ function Home({ user, token, dispatch }) {
                   </td>
                 </tr>
               ))}
+            </tbody>
+          </table>
+        </div>
+        <div className={"col"}>
+          <h3>Friend Requests</h3>
+          <table className={"table table-striped"}>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {user.requests.map((request) => (
+                  <tr key={request.id}>
+                    <td>
+                      <img style={{ width: "25px" }} src={request.inviter.avatar_url} alt={"Avatar"} />
+                      <Link to={{
+                        pathname: `/user/${request.inviter.name}`,
+                        state: {
+                          user: {...request.inviter, login: request.inviter.name}
+                        }
+                      }}>{request.inviter.name}</Link>
+                    </td>
+                    <td>
+                      <Button onClick={() => acceptFriendRequest(request)}>Accept</Button>
+                    </td>
+                  </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className={"col"}>
+          <h3>Your Friends</h3>
+          <table className={"table table-striped"}>
+            <thead>
+              <tr>
+                <th>Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              {user.friends.map((pair) => renderFriend(pair))}
             </tbody>
           </table>
         </div>
