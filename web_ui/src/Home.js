@@ -316,6 +316,7 @@ function Home({ user, token, dispatch }) {
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
