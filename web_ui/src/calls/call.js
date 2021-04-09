@@ -57,7 +57,10 @@ export function join(room_id, stream, setCall) {
             store.dispatch({type: "room/set", data: x})
         })
         .receive("error", resp => console.log("Unable to join", resp));
-    channel.on('leave', ({user}) => remove_caller(user))
+    channel.on('leave', ({user}) => {
+        store.dispatch({type: "room/leave", data: user})
+        remove_caller(user)
+    })
     channel.on('user', (caller) => setTimeout(() => {
         const {peer_id} = caller
         // Only collaborators have to connect to users
@@ -77,10 +80,19 @@ export function join(room_id, stream, setCall) {
         })
         store.dispatch({type: "room/collaborator", data: caller})
     }, 1000))
+    channel.onClose(() => {
+        call_setter(null)
+        call = null
+        local_stream = null
+        channel = null
+        store.dispatch({type: "room/clear"})
+    })
 }
+
 
 // If someone calls you answer appropriately
 peer.on('call', (c) => {
+    if(channel === null) return;
     console.log("received call from ", JSON.stringify(c.metadata))
     if(me.role === "collaborator" && c.metadata.role === "user") {
         // I just respond with my own stream but the users stream is useless
@@ -101,6 +113,10 @@ peer.on('call', (c) => {
     } else {
         console.log("ERROR UNEXPECTED CALL", JSON.stringify(c))
     }
-    
+
 })
 
+
+export function leave() {
+    channel && channel.leave()
+}

@@ -31,6 +31,22 @@ function room(state = null, action) {
             return action.data;
         case 'room/clear':
             return null;
+        case 'room/user':
+            const users = state.users.filter(u => u.user !== action.data.user)
+            users.push(action.data)
+            state.users = users
+            return state
+        case 'room/collaborator':
+            const collabs = state.collaborators.filter(u => u.user !== action.data.user)
+            collabs.push(action.data)
+            state.collaborators = collabs
+            return state
+        case 'room/leave':
+            const col = state.collaborators.filter(u => u.user !== action.data)
+            state.collaborators = col
+            const us = state.users.filter(u => u.user !== action.data)
+            state.users = us
+            return state
         default:
             return state;
     }

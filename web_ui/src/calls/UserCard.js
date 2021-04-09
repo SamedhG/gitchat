@@ -6,7 +6,6 @@ import muteIcon from './mic-fill.svg';
 import unmute from './mic-mute-fill.svg';
 
 export default function UserCard({username, mediaStream, play}) {
-    const [showButton, setShowButton] = useState(false); // mute button appears on hover
     const [mute, setMute] = useState(false); //are we muted?
     /**
      * TODO:
@@ -20,49 +19,42 @@ export default function UserCard({username, mediaStream, play}) {
         setMute(!mute);
     }
 
-    //render the mute/unmute button
-    function muteButton() {
-        if(mute) {
-            return ( <Button variant="secondary" 
-                onClick={() => toggleMute()}>
-                <img src={unmute} alt="unmute"/>
-            </Button>);
-        }
-        else {
-            return ( <Button 
-                variant="secondary" 
-                onClick={() => toggleMute()}>
-                <img src={muteIcon} alt="mute"/>
-            </Button>);
-        }
-    }
+
 
     //url to profile picture
     function profilePicturePath() {
         return "https://github.com/" + username + ".png"
     }
-
-
     return (
-        <Card className="text-center" style={{ width: '200px', height: '200px'}} 
-            onMouseEnter={() => setShowButton(true)} 
-            onMouseLeave={() => setShowButton(false)}>
+        <Card className="text-center" style={{ maxWidth: '200px', maxHeight: '300px'}} >
+            <Card.Header className="d-flex justify-content-md-between ">
+                {username}
+            </Card.Header>
             <Card.Img 
                 src={profilePicturePath()} alt="Profile Picture" 
                 style={{ width: '200px', height: '200px'}} />
             <Card.ImgOverlay>
-                <Card.Body style ={{display: "flex", flexDirection: "column"}}>
-                    {username}
-                    {showButton && muteButton()}
-                    {play && 
-                        <audio 
-                            autoPlay={true} 
-                            ref={audio => {if (audio) audio.srcObject = mediaStream}}
-                            style = {{width: 0}}/>}
 
-                    <div style={{marginTop: "auto"}}>
-                        <Visualizer mediaStream={mediaStream} />
-                    </div> 
+                <Card.Body>
+                    <div className="d-flex flex-column">
+                        <div className="p-2">
+                            <Button variant="secondary" 
+                                onClick={toggleMute}>
+                                <img src={mute ? unmute : muteIcon} alt="mute" />
+                            </Button>
+                        </div>
+                        <div className="mt-auto p-3">
+                            {play && 
+                            <audio 
+                                autoPlay={true} 
+                                ref={audio => {if (audio) audio.srcObject = mediaStream}}
+                                style = {{width: 0}}/>}
+
+                            <Visualizer mediaStream={mediaStream} />
+
+                        </div>
+                    </div>
+
 
                 </Card.Body>
             </Card.ImgOverlay>

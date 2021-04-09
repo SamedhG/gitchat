@@ -62,7 +62,7 @@ defmodule Gitchat.RoomServer do
   end
   
   def handle_call({:leave, room_id, username}, _from, room) do
-    room = Room.leave(username)
+    room = Room.leave(room, username)
     BackupAgent.put(room_id, room)
     send_update(room_id, "leave", %{user: username}) 
     {:reply, room, room}

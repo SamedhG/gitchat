@@ -10,8 +10,6 @@ import Heart from "react-animated-heart";
 
 function Home({ user, token, dispatch }) {
   token = token || load_token();
-  console.log(token);
-  console.log(user);
   const history = useHistory();
 
   useEffect(() => {

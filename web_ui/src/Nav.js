@@ -15,8 +15,6 @@ function Nav({ token, dispatch }) {
   const handleSearch = async (query) => {
     setIsLoading(true);
     const items = await load_user_search(token, query);
-    console.log(items);
-
     setOptions(items.data);
     setIsLoading(false);
   };

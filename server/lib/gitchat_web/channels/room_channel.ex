@@ -33,10 +33,7 @@ defmodule GitchatWeb.RoomChannel do
 
   @impl true
   def handle_in("leave", _payload, socket) do
-    user = socket.assigns[:username]
-    room_id = socket.assigns[:room_id]
-    room = RoomServer.leave(room_id, user)
-    {:ok, room, socket}
+    {:stop, socket}
   end
 
   @impl true
@@ -51,4 +48,12 @@ defmodule GitchatWeb.RoomChannel do
     end
   end
 
+
+  @impl true
+  def terminate(_payload, socket) do
+    user = socket.assigns[:username]
+    room_id = socket.assigns[:room_id]
+    room = RoomServer.leave(room_id, user)
+    {:ok, room, socket}
+  end
 end
