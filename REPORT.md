@@ -8,10 +8,14 @@ We were able to successfully deploy our app.
 Each team member's contributions are outlined below.
 
 Rohit
-
+- Freind Functionality
+- Database Work on the backend
+- Favoriting Repos
 
 Samedh
-
+ - Backend socket logic for calls
+ - Frontend call and permissions management
+ - UI for the room page
 
 Hannah
 - Worked with the Github API to do user authentication and other requests
@@ -19,7 +23,9 @@ Hannah
 - Home page and the user page
 
 Angela
-
+ - Worked On UI for the room page
+ - Designed the User Cards
+ - Room Page
 
 ## App Description
 
